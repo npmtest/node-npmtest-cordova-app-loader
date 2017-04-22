@@ -1,4 +1,7 @@
-# test coverage for  cordova-app-loader (v1.0.0)  [![npm package](https://img.shields.io/npm/v/npmtest-cordova-app-loader.svg?style=flat-square)](https://www.npmjs.org/package/npmtest-cordova-app-loader) [![travis-ci.org build-status](https://api.travis-ci.org/npmtest/node-npmtest-cordova-app-loader.svg)](https://travis-ci.org/npmtest/node-npmtest-cordova-app-loader)
+# npmtest-cordova-app-loader
+
+#### basic test coverage for  cordova-app-loader (v1.0.0)  [![npm package](https://img.shields.io/npm/v/npmtest-cordova-app-loader.svg?style=flat-square)](https://www.npmjs.org/package/npmtest-cordova-app-loader) [![travis-ci.org build-status](https://api.travis-ci.org/npmtest/node-npmtest-cordova-app-loader.svg)](https://travis-ci.org/npmtest/node-npmtest-cordova-app-loader)
+
 #### Cordova App Loader - remote update your cordova app
 
 [![NPM](https://nodei.co/npm/cordova-app-loader.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/cordova-app-loader)
@@ -32,21 +35,22 @@
 ```json
 
 {
-    "author": {
-        "name": "Mark Marijnissen"
-    },
-    "dependencies": {
-        "cordova-file-cache": "^1.1.0",
-        "cordova-promise-fs": "^1.1.0"
-    },
+    "name": "cordova-app-loader",
+    "version": "1.0.0",
     "description": "Cordova App Loader - remote update your cordova app",
-    "devDependencies": {},
-    "directories": {},
-    "dist": {
-        "shasum": "39f6fdcc82a97149cf19f3c1ec85a1ca04560dbc",
-        "tarball": "https://registry.npmjs.org/cordova-app-loader/-/cordova-app-loader-1.0.0.tgz"
+    "main": "index.js",
+    "scripts": {
+        "cordova-promise-fs": "npm run-script cordova-promise-fs prepublish && cp node_modules/cordova-file-cache/node_modules/cordova-promise-fs/dist/CordovaPromiseFS.js www/lib/CordovaPromiseFS.js",
+        "cordova-app-loader": "webpack index.js www/lib/CordovaAppLoader.js --output-library CordovaAppLoader --output-library-target var",
+        "bootstrap": "cp bootstrap.js www/bootstrap.js",
+        "copy-tests": "cp pegasus.js www/test/pegasus.js && cp node_modules/cordova-promise-fs/test/tests.js www/test/cordova-promise-fs-tests.js && cp node_modules/cordova-file-cache/test/tests.js www/test/cordova-file-cache-tests.js",
+        "autoupdate": "cp autoupdate.js www/autoupdate.js",
+        "bundle": " webpack bundle.js dist/cordova-app-loader-complete.js && cp dist/cordova-app-loader-complete.js www/lib/cordova-app-loader-complete.js",
+        "prepublish": "npm run copy-tests && npm run autoupdate && npm run bootstrap && npm run cordova-app-loader && npm run copy-to-dist && npm run bundle && npm run minify-dist",
+        "copy-to-dist": "cp www/lib/CordovaAppLoader.js dist/ && cp www/lib/CordovaPromiseFS.js dist/ && cp www/bootstrap.js dist/ && cp www/autoupdate.js dist/",
+        "minify-dist": " uglifyjs -c -m --screw-ie8 dist/bootstrap.js -o dist/bootstrap.min.js && uglifyjs -c -m --screw-ie8 dist/autoupdate.js -o dist/autoupdate.min.js && uglifyjs -c -m --screw-ie8 dist/CordovaPromiseFS.js -o dist/CordovaPromiseFS.min.js && uglifyjs -c -m --screw-ie8 dist/CordovaAppLoader.js -o dist/CordovaAppLoader.min.js && uglifyjs -c -m --screw-ie8 dist/cordova-app-loader-complete.js > dist/cordova-app-loader-complete.min.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
     },
-    "gitHead": "f4a995ccc2af1d9e9f6c8d22aff1443e5b638fc7",
     "keywords": [
         "cordova",
         "app",
@@ -54,31 +58,13 @@
         "remote",
         "update"
     ],
+    "author": "Mark Marijnissen",
     "license": "MIT",
-    "main": "index.js",
-    "maintainers": [
-        {
-            "name": "markmarijnissen"
-        },
-        {
-            "name": "objectivetruth"
-        }
-    ],
-    "name": "cordova-app-loader",
-    "optionalDependencies": {},
-    "scripts": {
-        "autoupdate": "cp autoupdate.js www/autoupdate.js",
-        "bootstrap": "cp bootstrap.js www/bootstrap.js",
-        "bundle": " webpack bundle.js dist/cordova-app-loader-complete.js && cp dist/cordova-app-loader-complete.js www/lib/cordova-app-loader-complete.js",
-        "copy-tests": "cp pegasus.js www/test/pegasus.js && cp node_modules/cordova-promise-fs/test/tests.js www/test/cordova-promise-fs-tests.js && cp node_modules/cordova-file-cache/test/tests.js www/test/cordova-file-cache-tests.js",
-        "copy-to-dist": "cp www/lib/CordovaAppLoader.js dist/ && cp www/lib/CordovaPromiseFS.js dist/ && cp www/bootstrap.js dist/ && cp www/autoupdate.js dist/",
-        "cordova-app-loader": "webpack index.js www/lib/CordovaAppLoader.js --output-library CordovaAppLoader --output-library-target var",
-        "cordova-promise-fs": "npm run-script cordova-promise-fs prepublish && cp node_modules/cordova-file-cache/node_modules/cordova-promise-fs/dist/CordovaPromiseFS.js www/lib/CordovaPromiseFS.js",
-        "minify-dist": " uglifyjs -c -m --screw-ie8 dist/bootstrap.js -o dist/bootstrap.min.js && uglifyjs -c -m --screw-ie8 dist/autoupdate.js -o dist/autoupdate.min.js && uglifyjs -c -m --screw-ie8 dist/CordovaPromiseFS.js -o dist/CordovaPromiseFS.min.js && uglifyjs -c -m --screw-ie8 dist/CordovaAppLoader.js -o dist/CordovaAppLoader.min.js && uglifyjs -c -m --screw-ie8 dist/cordova-app-loader-complete.js > dist/cordova-app-loader-complete.min.js",
-        "prepublish": "npm run copy-tests && npm run autoupdate && npm run bootstrap && npm run cordova-app-loader && npm run copy-to-dist && npm run bundle && npm run minify-dist",
-        "test": "echo \"Error: no test specified\" && exit 1"
+    "dependencies": {
+        "cordova-file-cache": "^1.1.0",
+        "cordova-promise-fs": "^1.1.0"
     },
-    "version": "1.0.0"
+    "bin": {}
 }
 ```
 
